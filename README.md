@@ -1,6 +1,6 @@
 # Palisade
 
-TODO: Write a gem description
+This gem is in development. Please check back for updates.
 
 ## Installation
 
