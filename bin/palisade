@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 
 require 'palisade/install'
+require 'palisade/backup'
 
 action = ARGV[0]
 
 case action
 when 'install'
   Palisade::Install.add_config
+when 'backup'
+  Palisade::Backup.backup
 else
   puts "Usage: palisade [ACTION]"
 end
