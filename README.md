@@ -1,26 +1,39 @@
 # Palisade
 
-This gem is in development. Please check back for updates.
+**WARNING! Palisade is still under v1.0 development. However, pieces of what
+I'd like to be v1.0 are working. This document reflects its current state. Feel
+free to use, but use at your own risk.**
 
-## Installation
+## Installation & Configuration
 
-Add this line to your application's Gemfile:
+Palisade is a system gem. Install it globally to your system:
 
-```ruby
-gem 'palisade'
+```text
+$ gem install palisade
 ```
 
-And then execute:
+If you're using `rbenv` or `rvm`, you may need to refresh your `$PATH`. Run
+that command, or simply open a new command line session.
 
-    $ bundle
+We then need to generate a config file:
 
-Or install it yourself as:
+```text
+$ palisade install
+```
 
-    $ gem install palisade
+This will generate a hidden directory -- `.palisade` -- inside your home
+directory. The Palisade directory has only one file -- `config.yml`. This is
+where you place your backup configuration.
 
 ## Usage
 
-TODO: Write usage instructions here
+Once you are configured, you can run backups from the command line.
+
+```text
+$ palisade backup
+```
+
+More automated options coming soon.
 
 ## Contributing
 
