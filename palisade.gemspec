@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
 
   Thanks for installing Palisade! 
 
-  Before you start building your fort, you need to install a
+  Before you start building your wall, you need to install a
   config file. Don't forget to run this command:
 
       palisade install

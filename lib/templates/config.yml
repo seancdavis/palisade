@@ -1,3 +1,8 @@
+# -------------------
+# This is your main configuration file for Palisade. It
+# drives the backups run by Palisade. Edit this to your
+# liking and then start backing up!
+# -------------------
 config:
   # -------------------
   # This is the root path to where your backups should be

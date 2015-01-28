@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'palisade/message'
 
 module Palisade
   class Install
@@ -13,12 +14,13 @@ module Palisade
     def add_config
       mk_config_dir
       copy_config_file
+      print_install_message
     end
 
     private
 
       def home_dir
-        `echo $HOME`
+        `echo $HOME`.strip
       end
 
       def config_dir
@@ -43,6 +45,15 @@ module Palisade
         unless File.exists?(config_file)
           system("cp #{config_template} #{config_file}")
         end
+      end
+
+      def print_install_message
+        Palisade::Message.print(
+          :install, 
+          {
+            :config_file => config_file 
+          }
+        )
       end
 
   end

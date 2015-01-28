@@ -1,6 +1,10 @@
 
 ------------------------------
 
-123
+Palisade added a config file here:
+
+    #{@vars[:config_file]}
+
+Edit this file and then start building your wall!
 
 ------------------------------
