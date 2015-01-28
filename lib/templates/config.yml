@@ -1,0 +1,49 @@
+config:
+  # -------------------
+  # This is the root path to where your backups should be
+  # stored.
+  # 
+  # This path should be accessible whenever the computer is
+  # on. So, if it's an external drive, you'll need to make
+  # sure it's always connected.
+  # -------------------
+  root: /path/to/my/backups
+# -------------------
+# This is where you store your backup settings. Each backup
+# is broken down as a project, which can have assets (files)
+# and a database. See the example below.
+# -------------------
+projects:
+  # -------------------
+  # The key should be a unique identifier for the project. 
+  # -------------------
+  my_first_project:
+    # -------------------
+    # `db` is the path to the database. If it is remote, use
+    # a full ssh url. You can use ssh config shorthand
+    # methods.
+    # 
+    # Note: You'll need a nightly dump of this database for
+    # this to work.
+    # -------------------
+    db: myserver.com:~/backups/my_app_production.sql
+    # -------------------
+    # `assets` should stay as it is and have NO VALUE
+    # -------------------
+    assets:
+      # -------------------
+      # `method` is the method by which we're going to back
+      # up the assets.
+      # 
+      # Options: rsync, s3cmd
+      # 
+      # You should make sure the method you're using is
+      # installed on your machine.
+      # -------------------
+      method: rsync
+      # -------------------
+      # From here, you can add as many keys as you want, and
+      # each can have their own remote ssh url.
+      # -------------------
+      files:  deploy@192.168.1.1:~/apps/my_app/shared/files
+      uploads: deploy@192.168.1.1:~/apps/my_app/shared/files

@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'palisade/install'
+
+action = ARGV[0]
+
+case action
+when 'install'
+  Palisade::Install.add_config
+else
+  puts "Usage: palisade [ACTION]"
+end
