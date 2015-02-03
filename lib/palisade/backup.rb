@@ -31,7 +31,8 @@ module Palisade
             when 'rsync'
               rsync(data['route'], project_dir(name))
             when 's3cmd'
-              s3cmd(data['route'], project_dir(name))
+              verify_s3_dir(name, asset_name)
+              s3cmd(data['route'], s3_dir(name, asset_name), data['config'])
             end
           end
         end
@@ -39,6 +40,11 @@ module Palisade
 
       def rsync(src, dest)
         system("rsync #{rsync_options} #{src} #{dest}")
+      end
+
+      def s3cmd(src, dest, config = nil)
+        config = "-c #{config}" unless config.nil?
+        system("s3cmd get -vr --skip-existing #{config} s3://#{src}/ #{dest}")
       end
 
       # ------------------------------------------ Directory Management
@@ -51,6 +57,10 @@ module Palisade
         "#{project_dir(name)}/db"
       end
 
+      def s3_dir(name, asset_name)
+        "#{project_dir(name)}/#{asset_name}"
+      end
+
       def verify_project_dir(name)
         unless Dir.exists?(project_dir(name))
           FileUtils.mkdir_p(project_dir(name))
@@ -60,6 +70,12 @@ module Palisade
       def verify_db_dir(name)
         unless Dir.exists?(db_dir(name))
           FileUtils.mkdir_p(db_dir(name))
+        end
+      end
+
+      def verify_s3_dir(name, asset_name)
+        unless Dir.exists?(s3_dir(name, asset_name))
+          FileUtils.mkdir_p(s3_dir(name, asset_name))
         end
       end
 
