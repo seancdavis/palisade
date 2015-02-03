@@ -37,18 +37,47 @@ projects:
     # -------------------
     assets:
       # -------------------
-      # `method` is the method by which we're going to back
-      # up the assets.
-      # 
-      # Options: rsync, s3cmd
-      # 
-      # You should make sure the method you're using is
-      # installed on your machine.
-      # -------------------
-      method: rsync
-      # -------------------
       # From here, you can add as many keys as you want, and
-      # each can have their own remote ssh url.
+      # each can have their own remote ssh url. Each key
+      # creates a segmented backup within this project.
+      # 
+      # Note: There should be no value for this key
       # -------------------
-      files:  deploy@192.168.1.1:~/apps/my_app/shared/files
-      uploads: deploy@192.168.1.1:~/apps/my_app/shared/files
+      files: 
+        # -------------------
+        # `method` is the method by which we're going to
+        # back up the assets.
+        # 
+        # Options: rsync, s3cmd
+        # 
+        # You should make sure the method you're using is
+        # installed on your machine.
+        # -------------------
+        method: rsync
+        # -------------------
+        # The route is the full path to the directory to
+        # backup. For rsync, you can use shorthand methods.
+        # -------------------
+        route: deploy@192.168.1.1:~/apps/my_app/shared/files
+      uploads: 
+        # -------------------
+        # This is an example that uses s3cmd to backup an
+        # Amazon S3 bucket.
+        # -------------------
+        method: s3cmd
+        # -------------------
+        # When you use s3cmd, you can point to a custom
+        # configuration file. If you leave this key blank
+        # (or if it's missing), we assume the default
+        # location.
+        # -------------------
+        config: ~/.mys3cfg
+        # -------------------
+        # Although s3cmd routes look this this:
+        # 
+        #     s3://mybucket/path/to/my/files/
+        # 
+        # You should omit the protocol, as we add that
+        # automatically.
+        # -------------------
+        route: mybucket/

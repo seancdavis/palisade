@@ -24,17 +24,14 @@ module Palisade
             verify_db_dir(name)
             rsync(config['db'], db_dir(name))
           end
-          if config['assets']
-            method = config['assets']['method']
+          config['assets'].each do |asset_name, data|
+            method = data['method']
             method = 'rsync' if method.nil? || method == ''
             case method
             when 'rsync'
-              config['assets'].each do |asset_name, url|
-                unless asset_name == 'method'
-                  # verify_asset_dir(name, asset_name)
-                  rsync(url, project_dir(name))
-                end
-              end
+              rsync(data['route'], project_dir(name))
+            when 's3cmd'
+              s3cmd(data['route'], project_dir(name))
             end
           end
         end
@@ -54,10 +51,6 @@ module Palisade
         "#{project_dir(name)}/db"
       end
 
-      # def asset_dir(project_name, asset_name)
-      #   "#{project_dir(project_name)}/#{asset_name}"
-      # end
-
       def verify_project_dir(name)
         unless Dir.exists?(project_dir(name))
           FileUtils.mkdir_p(project_dir(name))
@@ -69,12 +62,6 @@ module Palisade
           FileUtils.mkdir_p(db_dir(name))
         end
       end
-
-      # def verify_asset_dir(project_name, asset_name)
-      #   unless Dir.exists?(asset_dir(project_name, asset_name))
-      #     FileUtils.mkdir_p(asset_dir(project_name, asset_name))
-      #   end
-      # end
 
       # ------------------------------------------ Configuration / Options
 
