@@ -30,15 +30,19 @@ module Palisade
             rsync(config['db'], db_dir(name))
           end
           config['assets'].each do |asset_name, data|
-            @log.add_heading("Backing up assets: #{asset_name}", 3)
             method = data['method']
             method = 'rsync' if method.nil? || method == ''
             case method
             when 'rsync'
-              @log.add_heading("To: #{project_dir(name)}", 3)
+              @log.add_heading(
+                "Backing up assets: #{asset_name}\nTo: #{project_dir(name)}", 3
+              )
               rsync(data['route'], project_dir(name))
             when 's3cmd'
-              @log.add_heading("To: #{s3_dir(name, asset_name)}", 3)
+              @log.add_heading(
+                "Backing up assets: #{asset_name}\nTo: #{s3_dir(name, asset_name)}\n", 
+                3
+              )
               verify_s3_dir(name, asset_name)
               s3cmd(data['route'], s3_dir(name, asset_name), data['config'])
             end
@@ -47,12 +51,12 @@ module Palisade
       end
 
       def rsync(src, dest)
-        system("rsync #{rsync_options} #{src} #{dest}")
+        @log.add(`rsync #{rsync_options} #{src} #{dest}`)
       end
 
       def s3cmd(src, dest, config = nil)
         config = "-c #{config}" unless config.nil?
-        system("s3cmd get -vr --skip-existing #{config} s3://#{src}/ #{dest}")
+        @log.add(`s3cmd get -vr --skip-existing #{config} s3://#{src}/ #{dest} -`)
       end
 
       # ------------------------------------------ Directory Management
