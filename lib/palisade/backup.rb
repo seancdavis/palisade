@@ -1,10 +1,12 @@
 require 'yaml'
 require 'fileutils'
+require 'palisade/log'
 
 module Palisade
   class Backup
 
     def initialize
+      @log = Palisade::Log.new
     end
 
     def self.backup
@@ -18,19 +20,25 @@ module Palisade
     private
 
       def do_the_backup
+        @log.add_heading("Begin Backup: #{Time.now}", 1)
         projects.each do |name, config|
+          @log.add_heading("Project: #{name}", 2)
           verify_project_dir(name)
           if config['db']
+            @log.add_heading("Backing up database to: #{db_dir(name)}", 3)
             verify_db_dir(name)
             rsync(config['db'], db_dir(name))
           end
           config['assets'].each do |asset_name, data|
+            @log.add_heading("Backing up assets: #{asset_name}", 3)
             method = data['method']
             method = 'rsync' if method.nil? || method == ''
             case method
             when 'rsync'
+              @log.add_heading("To: #{project_dir(name)}", 3)
               rsync(data['route'], project_dir(name))
             when 's3cmd'
+              @log.add_heading("To: #{s3_dir(name, asset_name)}", 3)
               verify_s3_dir(name, asset_name)
               s3cmd(data['route'], s3_dir(name, asset_name), data['config'])
             end
